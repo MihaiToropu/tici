@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tutorial{% endblock %}
+
+{% block body %}
+    <h1>Tutorial</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tutorial.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ tutorial.title }}</td>
+            </tr>
+            <tr>
+                <th>ImagePath</th>
+                <td>{{ tutorial.imagePath }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ tutorial.description }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ tutorial.slug }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ tutorial.createdAt ? tutorial.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ tutorial.updatedAt ? tutorial.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('tutorial_index') }}">back to list</a>
+
+    <a href="{{ path('tutorial_edit', {'id': tutorial.id}) }}">edit</a>
+
+    {{ include('tutorial/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,12 @@
+{{ form_start(videoForm) }}
+    {{ form_row(videoForm.title, {
+        label: 'Video titlu'
+    }) }}
+    {{ form_row(videoForm.videoContent) }}
+    {% if videoForm.publishedAt is defined %}
+        {{ form_row(videoForm.publishedAt) }}
+    {% endif %}
+    {{ form_row(videoForm.author) }}
+
+<button type="submit" class="btn btn-primary">{{ text_button }}</button>
+{{ form_end(videoForm) }}

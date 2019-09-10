@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Following{% endblock %}
+
+{% block body %}
+
+    <script>
+
+        function watching(folder) {
+
+            console.log(folder);
+
+            var data = {
+                'tutorialId': folder.value,
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "/tutorial/add/to/fallow",
+                data: data
+            }).done(function () {
+                $('#' + folder.value).css('display', 'none');
+                $('#' + folder.value + "unfollow").show();
+                console.log('followed ' + folder.value);
+            })
+        }
+
+        function unwatching(folder) {
+
+            console.log(folder);
+
+            var data = {
+                'tutorialId': folder.value,
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "/tutorial/to/unfallow",
+                data: data
+            }).done(function () {
+                $('#' + folder.value + "unfollow").css('display', 'none');
+                $('#' + folder.value).show();
+                console.log('unfollowed ' + folder.value);
+
+            })
+        }
+
+    </script>
+
+    <div class="jumbotron bleu-bg font-Noto">
+        <div class="container">
+            <h1 style="font-size: 400%">Tutorials</h1>
+            <p>-Practice makes perfect-</p>
+        </div>
+    </div>
+
+    <div class="container">
+        {% for tutorial in tutorials %}
+            {% if tutorial.folder %}
+                <div class="row" style="padding-top: 30px">
+                    <div class="col-md-6" style="border-radius: 8px">
+                        <div class="img-hover-zoom img-overflow">
+                            <a href="{{ path('app_folder_show', {slug: tutorial.folder.slug}) }}"><img
+                                        src="{{ asset('images/' ~ tutorial.imagePath~ '.png') }}" class="img-responsive"
+                                        style="width:50%" alt="Tutorial Image"></a>
+                            <div class="div-shadow">
+                                <span class="span-folder-title block">{{ tutorial.title }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 tutorial-text" style="padding-top: 10px; border-radius: 8px">
+
+                        <button class="btn btn-warning" value="{{ tutorial.id }}" style="{{ tutorial.users.contains(app.user) ? '' : 'display: none'  }}" id="{{ tutorial.id }}unfollow"
+                                onclick="unwatching(this)"> - Unfollow
+                        </button>
+
+                        <button class="btn btn-primary" style="{{ tutorial.users.contains(app.user) ? 'display: none' : ''  }}" value="{{ tutorial.id }}" id="{{ tutorial.id }}"
+                                onclick="watching(this)"> + Follow
+                        </button>
+
+                        {#<input value="{{ tutorial.folder.id }}" onclick="watching(this)" type="checkbox">#}
+                        <div class="row margin-10-px">
+                            Created at: - <span
+                                    style="color: #0a6aa1">- {{ tutorial.createdAt ? tutorial.createdAt|date('Y-m-d') : '' }}</span>
+                        </div>
+                        <div class="row margin-10-px">
+                            Last update: - <span
+                                    style="color: #0a6aa1">- {{ tutorial.updatedAt ? tutorial.updatedAt|date('Y-m-d') : '' }} </span>
+                        </div>
+                        <div class="row margin-10-px">
+                            Description:
+                            <span style="color: #0a6aa1">- {{ tutorial.description | truncate }}</span>
+                        </div>
+                        <div class="row margin-10-px">
+                            Course:
+                            <span style="color: #0a6aa1">- <a
+                                        href="{{ path('app_folder_show', {slug: tutorial.folder.slug}) }}">{{ tutorial.folder.title }}</a></span>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <div>
+                No records found.
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

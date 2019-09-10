@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Employes{% endblock %}
+
+{% block body %}
+
+    <script>
+        function hasCompany(toggle) {
+            var data = {
+                'userId': toggle.value,
+            };
+            console.log(data['userId']);
+            $.ajax({
+                method: "POST",
+                url:"/company/list/employes/hasCompany",
+                data: data
+            }).done(function () {
+                console.log("success");
+            })
+        }
+
+        function hasNoCompany(toggle) {
+            var data = {
+                'userId': toggle.value,
+            };
+            console.log(data['userId']);
+            $.ajax({
+                method: "POST",
+                url:"/company/list/employes/hasNoCompany",
+                data: data
+            }).done(function () {
+                console.log("success");
+            })
+        }
+
+    </script>
+
+    <h1 class="text-center" style="margin-top: 3%">Employes of {{ app.user.company.name }}'s company</h1>
+    <div class="container" style="margin-top: 5%;">
+        <div class="col-md-12">
+            <table class="table" style="margin-bottom: 7%">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-right">Work's at {{ app.user.company.name }}?</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in Users %}
+                    {% if (user.id) != (app.user.id) %}
+                        <tr>
+                            <td> {{ user.firstName }} </td>
+                            <td class="text-right">
+                                {% if user.hasCompany == 0 %}
+                                    <label class="switch">
+                                        <input value="{{ user.id }}" type="checkbox" onclick="hasCompany(this)">
+                                        <span class="slider round"></span>
+                                    </label>
+                                {% elseif user.hasCompany == 1 %}
+                                    <label class="switch">
+                                        <input value="{{ user.id }}" type="checkbox" checked onclick="hasNoCompany(this)">
+                                        <span class="slider round"></span>
+                                    </label>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                {% else %}
+                    <tr>
+                        <td colspan="6">No tags found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}TICI Learn by practicing{% endblock %}</title>
+    {% block stylesheets %}
+        <link href="https://fonts.googleapis.com/css?family=Noto+Sans+HK|PT+Sans&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap-grid.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap/bootstrap-reboot.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/project.css') }}">
+    {% endblock %}
+
+    <link rel="icon" href="{{ asset('images/favicon_tici.png') }}">
+
+    <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap/bootstrap.js') }}"></script>
+    <script src="{{ asset('js/bootstrap/bootstrap.bundle.js') }}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    {#video#}
+    <link href="https://vjs.zencdn.net/7.5.5/video-js.css" rel="stylesheet">
+    <script src="//cdn.sc.gl/videojs-hotkeys/0.2/videojs.hotkeys.min.js"></script>
+
+
+</head>
+<body>
+
+{#Header Start#}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a href="{{ path('app_homepage') }}">
+        <img src="{{ asset('images/favicon_tici.png') }}" alt="HTML tutorial" style="width:42px;height:42px;border:0;">
+    </a>
+    {#<a class="navbar-brand" href="#">Tici</a>#}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ path('app_folder_index') }}"> Courses <span
+                            class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_tutorials_index') }} ">Tutorials</a>
+            </li>
+
+            {#{% if is_granted('ROLE_META') or is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_folder_upload_multiple') }} ">Upload multiple tutorials</a>
+                </li>
+            {% endif %}#}
+            {% if app.user and app.user.hasCompany %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('company_tutorials') }} ">Company</a>
+                {% endif %}
+
+                {% if (is_granted('ROLE_META')) and (app.user.hasCompany == 1) %}
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                   data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    MyCompany
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ path('app_folder_upload_multiple') }}">Courses</a>
+                    <a class="dropdown-item" href="{{ path('tag_index') }}">Tag</a>
+                    <a class="dropdown-item" href="{{ path('category_index') }}">Category</a>
+                    <a class="dropdown-item" href="{{ path('company_employes') }}">employes</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('company_edit', {'id': app.user.company.id}) }}">company</a>
+                </div>
+            </li>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/easyadmin/?entity=Comment&action=list">Admin</a>
+                </li>
+                {#<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Folder(Course)</a>
+                        <a class="dropdown-item" href="#">Tutorial</a>
+                        <a class="dropdown-item" href="#">Video</a>
+                        <a class="dropdown-item" href="{{ path('contact_list') }}">Contact</a>
+                        <a class="dropdown-item" href="/easyadmin/?entity=Comment&action=list">Comment</a>
+                        <a class="dropdown-item" href="{{ path('tag_index') }}">Tag</a>
+                        <a class="dropdown-item" href="{{ path('category_index') }}">Category</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">User</a>
+                    </div>
+                </li>#}
+            {% endif %}
+            {#<li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>#}
+        </ul>
+
+
+    </div>
+    {% if is_granted('ROLE_USER') %}
+        <div>
+            <span>{{ app.user.firstName }}</span>
+        </div>
+    {% endif %}
+    <div style="width: 10%;">
+        {% if is_granted('ROLE_USER') %}
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width: 100%">
+                        <img class="nav-profile-img rounded-circle" style="width: 50px"
+                             src="{{ asset('images/pinguin_avatar.png') }}">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <a class="dropdown-item" href="{{ path('app_folder_upload_multiple') }}">Add Video</a>
+                            <a class="dropdown-item" href="{{ path('contact_list') }}">Messages</a>
+                        {% elseif (is_granted('ROLE_META')) and (app.user.hasCompany == 0) %}
+                            <a class="dropdown-item" href="{{ path('company_new') }}">New Company</a>
+                            <a class="dropdown-item" href="{{ path('app_account_profile') }}">Profile</a>
+                            <a class="dropdown-item" href="{{ path('tutorials_following') }}">Following</a>
+                        {% elseif is_granted ('ROLE_USER') %}
+                            <a class="dropdown-item" href="{{ path('app_account_profile') }}">Profile</a>
+                            <a class="dropdown-item" href="{{ path('tutorials_following') }}">Following</a>
+                        {% endif %}
+                        <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                </li>
+            </ul>
+        {% else %}
+            <a href="{{ path('app_login') }}">
+                <button class="btn btn-primary my-2 my-sm-0" style="margin-left: 20px" type="submit">Login</button>
+            </a>
+        {% endif %}
+    </div>
+</nav>
+
+{#Header Stop#}
+
+
+{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+    <div class="alert" style="margin-bottom: 0;">
+        You are switched to customer.
+        <a href="{{ path('app_account_profile', {
+            '_switch_user': '_exit'
+        }) }}">EXIT</a>
+    </div>
+{% endif %}
+
+{% for message in app.flashes('newVideoMessage') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% block body %}
+{% endblock %}
+
+
+<footer class="footer">
+    <div class="ask-a-q" style="width: 5%">
+        <a href="{{ path('new_question') }}"><img class="grey light-up" style="width: 75%"
+                                                  src="{{ asset('/images/idea2.png') }}"
+                                                  alt="ask a question (bulb)"></a>
+    </div>
+</footer>
+
+{% block javascripts %}{% endblock %}
+</body>
+
+</html>

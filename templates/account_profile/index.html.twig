@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccountProfileController!{% endblock %}
+
+{% block body %}
+
+    <script>
+        function requestSent() {
+            $('#request').show();
+        }
+    </script>
+
+    <style>
+        .example-wrapper {
+            margin: 1em auto;
+            max-width: 800px;
+            width: 95%;
+            font: 18px/1.5 sans-serif;
+        }
+
+        .example-wrapper code {
+            background: #F5F5F5;
+            padding: 2px 6px;
+        }
+    </style>
+
+    <div class="example-wrapper">
+        <h1> Hello, {{ app.user.firstName }}! </h1>
+    </div>
+    <div class="container" style="margin-top: 6%">
+        <h2>Change personal information</h2>
+        <form action="{{ path('app_account_profile_update') }}" method="post">
+            <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input type="text" class="form-control" id="firstName"
+                       placeholder={{ app.user.firstName }} name="firstName">
+            </div>
+            {% if is_granted('ROLE_META') %}
+                <div class="form-group">
+                    <select class="form-control" name="company" id="company">
+                        {% if app.user.company %}
+                            <option value={{ app.user.company.id }} selected>{{ app.user.company.name }}</option>
+                        {% else %}
+                            <option value="" selected></option>
+                        {% endif %}
+                    </select>
+                </div>
+            {% else %}
+                <div class="form-group">
+                    <select class="form-control" name="company" id="company">
+                        {% for company in companies %}
+                            {% if app.user.company and company.id != app.user.company.id %}
+                                <option value="{{ company.id }}"> {{ company.name }} </option>
+                            {% else %}
+                                <option value="{{ company.id }}"> {{ company.name }} </option>
+                            {% endif %}
+                        {% endfor %}
+                        {% if app.user.company %}
+                            <option value={{ app.user.company.id }} selected>{{ app.user.company.name }}</option>
+                        {% else %}
+                            <option value="" selected></option>
+                        {% endif %}
+                    </select>
+                </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary" style="margin-top: 3%" onclick="requestSent()">Submit</button>
+            <div id="request" style="display: none; color: forestgreen">
+                Request has been sent!
+            </div>
+        </form>
+    </div>
+{% endblock %}

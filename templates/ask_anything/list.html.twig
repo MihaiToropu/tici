@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} List User opinions and questions{% endblock %}
+
+{% block body %}
+
+    <div class="jumbotron bleu-bg font-Noto">
+        <div class="container">
+            <h1 style="font-size: 200%">User or Visitors Opinions and Questions</h1>
+            <p>-Practice makes perfect-</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col-md-12">
+            <div class="row">
+            <div class="row">
+                {% for question in questions %}
+                    <div class="col-md-4">
+                        <div class="text-center" style="margin-top: 25%; background-color: aliceblue; border-radius: 5px">
+                            {{ question.title }}
+                        </div>
+                        <div class="div-contact-content" >
+                            <span style="margin: 3%">
+                                {{ question.content }}
+                            </span>
+                        </div>
+                        <div>
+                            <div class="text-center" style="background-color: aliceblue; border-radius: 5px">
+                            <span style="margin-left: 2%">
+                                From:
+                            </span>
+                                <span style="color: cornflowerblue">
+                                {{ question.email }}
+                            </span>
+                            </div>
+                            <div class="text-center" style="background-color: aliceblue; border-radius: 5px">
+                            <span style="margin-left: 2%">
+                                Sent at:
+                            </span>
+                                <span style="color: cornflowerblue">
+                                {{ question.createdAt|date('Y-m-d H:i:s') }}
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

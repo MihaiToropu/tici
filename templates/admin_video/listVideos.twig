@@ -1,0 +1,34 @@
+{% extends 'base_bg.html.twig' %}
+
+{% block content_body %}
+    <a href="{{ path('app_admin_video_new') }}" class="btn btn-primary pull-right">
+        Create <span class="fa fa-plus-circle"></span>
+    </a>
+    <h1>All Videos</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for video in videos %}
+            <tr>
+                <td>{{ video.title }}</td>
+                <td>{{ video.author.email }}</td>
+                <td>
+                    <a href="{{ path('app_admin_video_edit', {
+                        id: video.id
+                    }) }}">
+                        <span>✏</span>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

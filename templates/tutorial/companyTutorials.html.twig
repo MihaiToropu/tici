@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Company Courses{% endblock %}
+
+{% block body %}
+
+    {#{% block cirese %}
+        <li class="nav-item">
+            <a class="nav-link" href="{{ path('company_tutorials') }} ">Company</a>
+        </li>
+    {% endblock %}#}
+    <div class="jumbotron bleu-bg font-Noto">
+        <div class="container">
+            <h1 style="font-size: 400%">Company Courses</h1>
+            <p>-Practice makes perfect-</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            {% for folder in folders %}
+                <div class="col-md-4 folderTitle">
+                    <div class="img-hover-zoom img-overflow">
+                        <a href="{{ path('app_folder_show', {slug: folder.slug}) }}"><img
+                                    src="{{ asset('images/' ~ folder.imagePath~ '.png') }}" class="img-responsive"
+                                    style="width:100%" alt="Course Image"></a>
+                        <div class="div-shadow">
+                            <span class="span-folder-title block">{{ folder.title }}</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

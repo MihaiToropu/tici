@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ video.title }}{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    </style>
+
+    <div class="example-wrapper">
+    <span>
+        {{ video.publishedAt ? video.publishedAt|ago : 'not listed' }}
+    </span>
+        {% for  comment in video.existingComments %}
+            <div>
+                {% if comment.isDeleted %}
+                    <div>
+                        <span class="fa fa-close"></span> Comment has been removed
+                    </div>
+                {% endif %}
+                <span>
+                    {{ comment. userName }}
+                </span>
+                <span>
+                    {{ comment.content }}
+                </span>
+                <span>
+                    {{ comment.createdAt|ago }}
+                </span>
+                <br>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}

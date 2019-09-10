@@ -1,0 +1,189 @@
+{#{% block content_class %}{{ parent() }} show-article-container-border-green{% endblock %}#}
+
+
+{% block content_body %}
+
+    <script type="text/javascript">
+        function replyTo(val) {
+
+            var parentId = val.value.toString();
+
+            $('.reply-comment-button').css('display', 'none');
+
+            $(".reply-comment-button").closest("." + val.value).after("<hr style=\"padding-top: 30px\">\n" +
+                "    <div id=\"reply-div\" class=\"row mb-5\" style=\"padding-top: 30px\">\n" +
+                "        <div class=\"col-sm-12\">\n" +
+                "            <img class=\"comment-img rounded-circle\" style=\"width: 50px\"\n" +
+                "                 src=\"{{ asset('images/pinguin_avatar.png') }}\">\n" +
+                "            <div class=\"comment-container d-inline-block pl-3 align-top\">\n" +
+                "                <span class=\"commenter-name\">You:</span>\n" +
+                "                <div class=\"form-group\">\n" +
+                "                        <textarea rows=\"5\" cols=\"80\" class=\"form-control comment-form\" id=\"replyText\"\n" +
+                "                                 >\n" +
+                "                        </textarea>\n" +
+                "                </div>\n" +
+                "                <div id=\"emptyComment\" style=\"color: red; padding-bottom: 20px; display: none\">\n" +
+                "                    Comment is empty!\n" +
+                "                </div>\n" +
+                "                <div id=\"waitComment\" style=\"color: green; padding-bottom: 20px; display: none\">\n" +
+                "                    The comment has been sent! Wait for approval.\n" +
+                "                </div>\n" +
+                "                <button id=\"postReply\" onclick=\"postReply(this)\" " +
+                "value=" +
+                val.value +
+                "\" class=\"reply-comment-button btn btn-primary\">Reply</button>" +
+                "<button class=\"btn btn-danger\" style=\"margin-left: 15px\" onclick=\"cancelReply()\">\n" +
+                "                                Cancel\n" +
+                "                            </button>" +
+                "            </div>\n" +
+                "        </div>\n" +
+                "    </div>");
+        }
+
+        function cancelReply() {
+            $('#reply-div').css('display', 'none');
+            $('.reply-comment-button').show();
+        }
+
+        function postReply(val) {
+            var data = {
+                'parentId': val.value,
+                'comment': $('#replyText').val(),
+                'videoId': $('#divHidden').attr('data-video-id'),
+            };
+
+            if (!$.trim($("#replyText").val())) {
+                $('#emptyComment').show();
+            } else {
+                $.ajax({
+                    method: "POST",
+                    url: "/comment/new",
+                    data: data
+                }).done(function () {
+                    $('#replyText').val("");
+                    $('#emptyComment').css('display', 'none');
+                    $('#waitComment').show();
+                });
+            }
+        }
+
+        $(document).ready(
+            document.getElementById("postComment").addEventListener("click", function postComment() {
+
+                var data = {
+                    'comment': $('#commentText').val(),
+                    'videoId': $('#divHidden').attr('data-video-id'),
+                };
+
+                if (!$.trim($("#commentText").val())) {
+                    $('#emptyComment').show();
+                    $('#waitComment').css('display', 'none');
+                } else {
+                    $.ajax({
+                        method: "POST",
+                        url: "/comment/new",
+                        data: data
+                    }).done(function () {
+                        $('#commentText').val("");
+                        $('#emptyComment').css('display', 'none');
+                        $('#waitComment').show();
+                    });
+                }
+            })
+        )
+
+    </script>
+
+    <div class="col-sm-12">
+        <div class="row">
+
+
+            {% for comment in tree %}
+
+                {% if comment.parentId %}
+                    {% if comment.isDeleted %}
+                    {% else %}
+                        <div class="{{ comment.id }} col-md-12"
+                             style="display: inline; padding-top: 30px; padding-left: 70px">
+                            <div class="col-md-1" style="float: left; padding-top: 20px">
+                                <img class="comment-img rounded-circle" src="{{ asset('/images/pinguin_avatar.png') }}"
+                                     style="width: 85%">
+                            </div>
+                            <div class="col-md-11 comment-container d-inline-block pl-3 align-top"
+                                 style="float: left; padding-top: 20px">
+                                <span class="commenter-name"> {{ comment.userName }}</span>
+                                <small style="color: dodgerblue">about {{ comment.createdAt|ago }}</small>
+
+                                <br>
+                                <span class="comment"> {{ comment.content }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% else %}
+                    {% if comment.isDeleted %}
+                    {% else %}
+                        <div class="{{ comment.id }} col-md-12" style="display: inline; padding-top: 30px">
+                            <div class="col-md-1" style="float: left; padding-top: 20px">
+                                <img class="comment-img rounded-circle" src="{{ asset('/images/pinguin_avatar.png') }}"
+                                     style="width: 85%">
+                            </div>
+                            <div class="col-md-11 comment-container d-inline-block pl-3 align-top"
+                                 style="float: left; padding-top: 20px">
+                                <span class="commenter-name"> {{ comment.userName }} </span>
+                                <small style="color: dodgerblue">about {{ comment.createdAt|ago }}</small>
+                                <br>
+                                <span class="comment"> {{ comment.content }}</span>
+                            </div>
+                            {% if is_granted('ROLE_USER') %}
+
+                                <div style="padding-left: 100px; padding-top: 80px; padding-bottom: 20px; background-color: aliceblue; border-radius: 10px">
+                                    <button id="{{ comment.id }}" value="{{ comment.id }}" onclick="replyTo(this)"
+                                            class="reply-comment-button btn btn-primary">Reply
+                                    </button>
+                                </div>
+                            {% endif %}
+                            <div id="comment-id" style="display: none">
+                                {{ comment.id }}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+            {% else %}
+
+                <div class="row">
+                    No comments found
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <hr style="padding-top: 30px">
+    {% if is_granted('ROLE_USER') %}
+        <div class="row mb-5" style="padding-top: 30px">
+            <div class="col-sm-12">
+                <img class="comment-img rounded-circle" style="width: 50px"
+                     src="{{ asset('images/pinguin_avatar.png') }}">
+                <div class="comment-container d-inline-block pl-3 align-top">
+                    <span class="commenter-name">You:</span>
+                    <div class="form-group">
+                        <textarea rows="5" cols="80" class="form-control comment-form" id="commentText">
+                        </textarea>
+                    </div>
+                    <div id="emptyComment" style="color: red; padding-bottom: 20px; display: none">
+                        Comment is empty!
+                    </div>
+                    <div id="waitComment" style="color: green; padding-bottom: 20px; display: none">
+                        The comment has been sent! Wait for approval.
+                    </div>
+                    <button type="submit" id="postComment" class="btn btn-info" style="padding-top: 5px">Comment
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock %}

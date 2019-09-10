@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} New Tag{% endblock %}
+
+{% block body %}
+    <h1 style="margin-top: 2%; margin-bottom: 3%; margin-left: 22%">Create new Tag</h1>
+    <div class="container">
+        <div class="col-md-8">
+            <div class="form-group"><label for="tag_name" class="required">Name</label><input type="text" id="tag_name" name="tag[name]" required="required" maxlength="255" class="form-control"></div>
+            <div class="form-group"><label for="tag_slug">Slug</label><input type="text" id="tag_slug" name="tag[slug]" maxlength="180" class="form-control"></div>
+        </div>
+        <button class="btn btn-primary"><a style="color: white">Save</a></button>
+        <a href="/tag/">back to list</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Ask a question!{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid" style="margin-left: 10%">
+        <h1 style="font-size: 55px">Write To Us</h1>
+        <div class="col-md-8">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <button class="btn btn-success" >{{ button_label|default('Save') }}</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock %}

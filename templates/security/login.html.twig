@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ parent() }} Login {% endblock %}
+
+{% block body %}
+
+    <div style="overflow: hidden" class="font-Noto">
+        <div style="padding-top: 7%; float: left" class="col-md-6">
+
+            <h1 class="text-center" style="color: #0a6aa1"> Welcome to TICI! </h1>
+            <h4 class="text-center text-muted"> -Practice makes perfect- </h4>
+
+            <form class="form-signin" method="post">
+                {% if error %}
+                    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+                <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+                <label for="inputEmail" class="sr-only">Email address</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control"
+                       placeholder="Email address" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password"
+                       required>
+
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+
+                <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" name="_remember_me"> Remember me
+                    </label>
+                </div>
+                <a href="{{ path('app_forgot_password') }}">Forgot your password?</a>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Sign in
+                </button>
+                <span class="text-info text-center">Not registered? </span><a href="{{ path('app_register') }}">Create
+                    an
+                    account</a>
+            </form>
+        </div>
+        <img style="float: left" class="col-md-6" src="{{ asset('images/parrot-login.png') }}" alt="parrot image">
+    </div>
+{% endblock %}

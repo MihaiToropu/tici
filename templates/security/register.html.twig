@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+{% form_theme registration _self %}
+
+{%- block form_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+
+    {{- form_label(form, null, {
+        label_attr: { class: 'sr-only' }
+    }) -}}
+    {{- form_errors(form) -}}
+    {{- form_widget(form, widget_attr) -}}
+    {{- form_help(form) -}}
+{%- endblock form_row -%}
+
+{% block _registration_agreeTerms_row %}
+    <div class="checkbox mb-3">
+        {{ form_errors(form) }}
+        {{ form_help(form) }}
+        <label>
+            <input type="checkbox" name="{{ full_name }}"> Agree with terms
+        </label>
+    </div>
+{% endblock %}
+
+{% block title %} {{ parent() }} Register {% endblock %}
+
+{% block body %}
+
+    <div style="overflow: hidden" class="font-Noto">
+        <div style="padding-top: 7%; float: left;" class="col-md-6">
+            <h1 class="text-center" style="color: #0a6aa1"> Welcome to TICI! </h1>
+            <h4 class="text-center text-muted"> -Practice makes perfect- </h4>
+
+            {{ form_start(registration, {
+                attr: { class: 'form-signin'}
+            }) }}
+
+            {{ form_row(registration.email, {
+                attr: {placeholder: 'Email'}
+            }) }}
+            {{ form_row(registration.plainPassword, {
+                attr: {placeholder: 'Password'}
+            }) }}
+            {{ form_row(registration.agreeTerms) }}
+
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">
+                Register
+            </button>
+
+            {{ form_end(registration) }}
+
+        </div>
+        <img style="float: left" class="col-md-6" src="{{ asset('images/parrot-login.png') }}" alt="parrot image">
+    </div>
+
+{% endblock %}

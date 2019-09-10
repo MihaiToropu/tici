@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tutorial index{% endblock %}
+
+{% block body %}
+    <h1>Tutorial index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>ImagePath</th>
+                <th>Description</th>
+                <th>Slug</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tutorial in tutorials %}
+            <tr>
+                <td>{{ tutorial.id }}</td>
+                <td>{{ tutorial.title }}</td>
+                <td>{{ tutorial.imagePath }}</td>
+                <td>{{ tutorial.description }}</td>
+                <td>{{ tutorial.slug }}</td>
+                <td>{{ tutorial.createdAt ? tutorial.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ tutorial.updatedAt ? tutorial.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+               {# <td>
+                    <a href="{{ path('tutorial_show', {'id': tutorial.id}) }}">show</a>
+                    <a href="{{ path('tutorial_edit', {'id': tutorial.id}) }}">edit</a>
+                </td>#}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('tutorial_new') }}">Create new</a>
+{% endblock %}
